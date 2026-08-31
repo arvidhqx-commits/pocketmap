@@ -1,0 +1,82 @@
+# PocketMap — a minimap without a client mod.
+#
+# How it works: every player gets one own vanilla map. The map is kept centred
+# on the player and placed in the offhand, where the client draws it as a HUD
+# all by itself. No packets, no NMS — that is exactly why this plugin survives
+# Minecraft updates that break packet-based minimaps.
+
+map:
+  # Zoom. CLOSEST shows 128x128 blocks (1 pixel = 1 block) and is the only
+  # setting that really feels like a minimap. CLOSE/NORMAL/FAR/FARTHEST zoom out.
+  scale: CLOSEST
+
+  # The white arrow that marks the player on the map.
+  show-player-marker: true
+
+  # Vanilla hides the marker once the player leaves the mapped area. Since the
+  # map follows the player, that should not happen — leave this off unless you
+  # see the arrow disappear.
+  unlimited-tracking: false
+
+  # Name shown on the HUD item. Empty keeps the vanilla "Map" name.
+  item-name: '<aqua>Minimap</aqua>'
+
+update:
+  # How often (in ticks, 20 = 1 second) PocketMap looks at moved players.
+  interval-ticks: 10
+
+  # Only re-centre once the player is this many blocks off centre. Re-centring
+  # forces a full redraw of all 128x128 pixels, so a small number costs
+  # bandwidth for no visible gain. At 8 the player is still practically in the
+  # middle of a map that is 128 blocks wide.
+  recenter-distance: 8
+
+  # Push the new picture to the player right after re-centring. The server
+  # normally does that by itself for a map held in hand; if your network is the
+  # bottleneck you can turn this off and see whether the map still follows.
+  force-send: true
+
+offhand:
+  # The offhand belongs to the player. Whatever was in it is stored with all its
+  # data and handed back when the minimap goes off, on quit, on death and when
+  # the plugin is disabled. The store survives a server restart, and it is never
+  # overwritten — there is deliberately no option to keep the item.
+
+  # A Totem of Undying in the offhand does NOT save you while the minimap is
+  # there — the slot is taken. PocketMap therefore refuses to turn on over a
+  # totem instead of quietly costing you a life. Set to false to allow it.
+  refuse-over-totem: true
+
+  # Stop the minimap item from being dropped, moved in the inventory or swapped
+  # into the main hand. Without this a player can litter the world with it.
+  protect-item: true
+
+  # On death the minimap item is taken out of the drops and the stored offhand
+  # item is dropped in its place — exactly what would have happened without
+  # PocketMap.
+  handle-death: true
+
+  # Turn the minimap back on after respawning.
+  reenable-after-respawn: true
+
+# Remember across restarts and re-logins who had the minimap on.
+remember: true
+
+# Worlds in which the minimap stays off. Example: [ world_nether, minigames ]
+disabled-worlds: []
+
+messages:
+  prefix: '<gray>[<aqua>PocketMap</aqua>]</gray> '
+  enabled: '<green>Minimap on.</green>'
+  disabled: '<gray>Minimap off.</gray>'
+  already-on: '<gray>The minimap is already on.</gray>'
+  already-off: '<gray>The minimap is already off.</gray>'
+  item-returned: '<gray>Your offhand item is back.</gray>'
+  item-dropped: '<yellow>Your inventory was full — the offhand item is on the ground.</yellow>'
+  totem-blocked: '<red>A totem in the offhand would not save you while the minimap is there. Move it first.</red>'
+  world-disabled: '<red>No minimap in this world.</red>'
+  no-permission: '<red>You may not do that.</red>'
+  players-only: '<red>Only players have an offhand.</red>'
+  reloaded: '<green>Configuration reloaded.</green>'
+  status-on: '<gray>Minimap: <green>on</green>, map #<white>{id}</white>, scale <white>{scale}</white>.</gray>'
+  status-off: '<gray>Minimap: <red>off</red>.</gray>'

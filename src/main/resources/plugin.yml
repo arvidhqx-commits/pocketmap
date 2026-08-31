@@ -1,0 +1,18 @@
+name: PocketMap
+version: '${version}'
+main: dev.pocketmap.PocketMapPlugin
+api-version: '1.21'
+description: Server-side minimap in the offhand. No client mod required.
+author: arvidhqx-commits
+commands:
+  pocketmap:
+    description: Turn the minimap on or off.
+    usage: /pocketmap [on|off|status|reload]
+    aliases: [pmap]
+permissions:
+  pocketmap.use:
+    description: Use the minimap.
+    default: true
+  pocketmap.admin:
+    description: Reload the configuration.
+    default: op
